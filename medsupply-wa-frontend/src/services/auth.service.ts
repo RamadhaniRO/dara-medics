@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { Session, AuthError } from '@supabase/supabase-js';
+import { enableEmailVerification, enableSocialLogin } from '../config/environment';
 
 export interface AuthUser {
   id: string;
@@ -90,7 +91,8 @@ export class SupabaseAuthService {
           data: {
             full_name: data.full_name,
             pharmacy_name: data.pharmacy_name
-          }
+          },
+          emailRedirectTo: enableEmailVerification ? `${window.location.origin}/auth/verify` : undefined
         }
       });
 
@@ -239,6 +241,10 @@ export class SupabaseAuthService {
   // Social login
   async signInWithProvider(provider: 'google' | 'microsoft' | 'apple'): Promise<{ error: AuthError | null }> {
     try {
+      if (!enableSocialLogin) {
+        return { error: { message: 'Social login is disabled' } as AuthError };
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider as any,
         options: {

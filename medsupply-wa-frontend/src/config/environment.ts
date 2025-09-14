@@ -12,23 +12,22 @@ interface EnvironmentConfig {
 }
 
 const getEnvironmentConfig = (): EnvironmentConfig => {
-  const isDevelopment = process.env.NODE_ENV === 'development';
   const isProduction = process.env.NODE_ENV === 'production';
 
   return {
-    // API Configuration
-    apiUrl: process.env.REACT_APP_API_URL || (isDevelopment ? 'http://localhost:3000' : ''),
+    // API Configuration - Always use production URL
+    apiUrl: process.env.REACT_APP_API_URL || 'https://your-backend-domain.vercel.app',
     
-    // Environment
-    environment: (process.env.REACT_APP_ENV as any) || (isDevelopment ? 'development' : 'production'),
+    // Environment - Always production
+    environment: 'production',
     
-    // Feature Flags
-    enableAnalytics: process.env.REACT_APP_ENABLE_ANALYTICS === 'true' && isProduction,
-    enableDebug: process.env.REACT_APP_ENABLE_DEBUG === 'true' || isDevelopment,
+    // Feature Flags - Production settings
+    enableAnalytics: process.env.REACT_APP_ENABLE_ANALYTICS === 'true',
+    enableDebug: false,
     
-    // Development
-    mockApi: process.env.REACT_APP_MOCK_API === 'true',
-    logLevel: (process.env.REACT_APP_LOG_LEVEL as any) || (isDevelopment ? 'debug' : 'error'),
+    // Production settings
+    mockApi: false,
+    logLevel: 'error',
     
     // External Services
     googleAnalyticsId: process.env.REACT_APP_GOOGLE_ANALYTICS_ID,

@@ -18,6 +18,98 @@ export function createAuthRoutes(databaseService: DatabaseService, logger: Logge
     res.json({ message: 'Minimal Supabase auth routes are working!', timestamp: new Date().toISOString() });
   });
 
+  // Email verification endpoint
+  router.post('/verify-email', async (req: Request, res: Response) => {
+    console.log('📧 EMAIL VERIFICATION REQUEST');
+    
+    try {
+      const { token } = req.body;
+
+      if (!token) {
+        return res.status(400).json({
+          success: false,
+          message: 'Verification token is required'
+        });
+      }
+
+      // Verify email with Supabase
+      const { data, error } = await databaseService.supabase.auth.verifyOtp({
+        token_hash: token,
+        type: 'email'
+      });
+
+      if (error) {
+        console.error('Email verification error:', error);
+        return res.status(400).json({
+          success: false,
+          message: error.message || 'Email verification failed'
+        });
+      }
+
+      console.log('✅ Email verified successfully:', data.user?.email);
+      
+      res.json({
+        success: true,
+        message: 'Email verified successfully',
+        user: data.user
+      });
+
+    } catch (error: any) {
+      console.error('Email verification error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error during email verification'
+      });
+    }
+  });
+
+  // Resend verification email endpoint
+  router.post('/resend-verification', async (req: Request, res: Response) => {
+    console.log('📧 RESEND VERIFICATION REQUEST');
+    
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email address is required'
+        });
+      }
+
+      // Resend verification email with Supabase
+      const { data, error } = await databaseService.supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: `${process.env.FRONTEND_URL}/auth/verify`
+        }
+      });
+
+      if (error) {
+        console.error('Resend verification error:', error);
+        return res.status(400).json({
+          success: false,
+          message: error.message || 'Failed to resend verification email'
+        });
+      }
+
+      console.log('✅ Verification email resent to:', email);
+      
+      res.json({
+        success: true,
+        message: 'Verification email sent successfully'
+      });
+
+    } catch (error: any) {
+      console.error('Resend verification error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error while resending verification email'
+      });
+    }
+  });
+
   // Registration - Let Supabase handle everything
   router.post('/register', async (req: Request, res: Response) => {
     console.log('🎯 MINIMAL REGISTRATION STARTED');

@@ -526,6 +526,21 @@ class ApiClient {
     return this.request('/health');
   }
 
+  // Email verification methods
+  async verifyEmail(token: string): Promise<ApiResponse<{ success: boolean; message?: string }>> {
+    return this.request('/api/auth/verify-email', {
+      method: 'POST',
+      body: JSON.stringify({ token })
+    });
+  }
+
+  async resendVerificationEmail(email: string): Promise<ApiResponse<{ success: boolean; message?: string }>> {
+    return this.request('/api/auth/resend-verification', {
+      method: 'POST',
+      body: JSON.stringify({ email })
+    });
+  }
+
   // Logout (clear token)
   logout() {
     this.setToken(null);

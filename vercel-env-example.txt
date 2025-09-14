@@ -2,7 +2,7 @@
 # Copy these to your Vercel project settings
 
 # Frontend Environment Variables
-REACT_APP_API_URL=https://your-backend-domain.vercel.app
+REACT_APP_API_URL=https://dara-medics.vercel.app/
 
 # Backend Environment Variables
 NODE_ENV=production
@@ -16,7 +16,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 # Authentication Configuration
 JWT_SECRET=nItHhNqk3uMbd37iGajdw0kMcful9vCT4Fw5Y/dqGkU73w/mJr/KhZkEU1yh3QjTMBZRv7gVyNGAd+mvZwp6lQ==
 JWT_EXPIRES_IN=24h
-JWT_ISSUER=https://your-backend-domain.vercel.app
+JWT_ISSUER=https://dara-medics.vercel.app/
 JWT_AUDIENCE=https://your-frontend-domain.vercel.app
 
 # Social Authentication (OAuth) Configuration
@@ -35,7 +35,7 @@ APPLE_KEY_ID=your_apple_key_id
 APPLE_PRIVATE_KEY=your_apple_private_key
 
 # OAuth Redirect URLs
-API_BASE_URL=https://your-backend-domain.vercel.app
+API_BASE_URL=https://dara-medics.vercel.app/
 FRONTEND_URL=https://your-frontend-domain.vercel.app
 
 # CORS Configuration

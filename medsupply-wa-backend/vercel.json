@@ -16,10 +16,5 @@
   "env": {
     "NODE_ENV": "production",
     "PORT": "3000"
-  },
-  "functions": {
-    "src/serverless.ts": {
-      "maxDuration": 30
-    }
   }
 }

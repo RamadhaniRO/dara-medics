@@ -1,0 +1,81 @@
+# Frontend Loading Issue - Diagnostic Guide
+
+## 🔍 **Quick Diagnosis Steps:**
+
+### **Step 1: Check Browser Console**
+1. Open your frontend: https://dara-medics-frontend.vercel.app
+2. Press F12 to open Developer Tools
+3. Go to Console tab
+4. Look for any error messages (red text)
+5. Look for any warnings (yellow text)
+
+**Common errors you might see:**
+- `Supabase configuration is missing`
+- `Failed to fetch`
+- `Network error`
+- `CORS error`
+
+### **Step 2: Test Backend Directly**
+Open these URLs in your browser:
+
+1. **Backend Health Check:**
+   ```
+   https://dara-medics-backend.vercel.app/health
+   ```
+   Should return: `{"status":"ok","supabase_connected":true}`
+
+2. **Backend API Info:**
+   ```
+   https://dara-medics-backend.vercel.app/
+   ```
+   Should show available endpoints
+
+### **Step 3: Check Network Tab**
+1. In Developer Tools, go to Network tab
+2. Refresh the page
+3. Look for failed requests (red entries)
+4. Check if requests to backend are failing
+
+### **Step 4: Add Frontend Environment Variables**
+
+**Go to Vercel Dashboard:**
+1. Select `dara-medics-frontend` project
+2. Go to Settings → Environment Variables
+3. Add these variables (set for Production, Preview, Development):
+
+```
+REACT_APP_API_URL=https://dara-medics-backend.vercel.app
+REACT_APP_SUPABASE_URL=https://mdwicqcwzkmlwajxutjy.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kd2ljcWN3emttbHdhanh1dGp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5ODk1MTUsImV4cCI6MjA3MjU2NTUxNX0.rXTR5PaijHWzt78MXiWBrjyL0n4fhap4PS1hKIvZNTY
+REACT_APP_ENABLE_EMAIL_VERIFICATION=true
+REACT_APP_ENABLE_SOCIAL_LOGIN=true
+REACT_APP_SESSION_TIMEOUT=1440
+REACT_APP_AUTO_LOGOUT=true
+REACT_APP_DEBUG_MODE=false
+REACT_APP_LOG_LEVEL=error
+```
+
+### **Step 5: Redeploy Frontend**
+After adding environment variables:
+1. Go to Deployments tab
+2. Click "Redeploy" on latest deployment
+3. Wait for deployment to complete
+4. Test the frontend again
+
+## 🚨 **Most Likely Issues:**
+
+1. **Missing REACT_APP_SUPABASE_URL** - Frontend can't connect to Supabase
+2. **Missing REACT_APP_SUPABASE_ANON_KEY** - Authentication fails
+3. **Missing REACT_APP_API_URL** - Frontend can't reach backend
+4. **Backend not responding** - Need to add backend environment variables
+
+## ✅ **Expected Results After Fix:**
+
+- Frontend should load without infinite loading
+- Should show login/register page
+- Should be able to connect to backend
+- Should be able to authenticate with Supabase
+
+## 📞 **If Still Not Working:**
+
+Share the console error messages and I'll help you fix them!

@@ -249,9 +249,11 @@ export const createErrorBoundaryFallback = (error: AppError) => {
   };
 };
 
-export default {
+const errorHandler = {
   classifyError,
   handleError,
   setupGlobalErrorHandling,
   createErrorBoundaryFallback
 };
+
+export default errorHandler;

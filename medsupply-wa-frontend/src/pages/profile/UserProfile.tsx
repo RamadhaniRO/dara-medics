@@ -4,7 +4,6 @@ import {
   FiShield, 
   FiBell,
   FiCreditCard,
-  FiGlobe,
   FiSave,
   FiEdit,
   FiLogOut,

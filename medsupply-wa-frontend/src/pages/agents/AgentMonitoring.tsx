@@ -125,7 +125,7 @@ const AgentMonitoring: React.FC = () => {
     };
 
     fetchAgentsData();
-  }, [selectedStatus, selectedRole]);
+  }, [selectedStatus, selectedRole, handleAuthError]);
 
   const handleStatusChange = (status: string) => {
     setSelectedStatus(status);

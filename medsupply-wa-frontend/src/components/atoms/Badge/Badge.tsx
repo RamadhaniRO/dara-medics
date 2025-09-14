@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 // Embedded theme values for self-containment
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const theme = {
   colors: {
     primary: {

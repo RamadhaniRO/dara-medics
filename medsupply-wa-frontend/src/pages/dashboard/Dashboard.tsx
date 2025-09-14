@@ -88,7 +88,7 @@ const Dashboard: React.FC = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [handleAuthError]);
 
   // Format metrics for display
   const formatMetrics = (data: DashboardMetrics) => {

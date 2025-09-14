@@ -11,7 +11,6 @@ import { Text } from '../../components/atoms/Text';
 import { Flex } from '../../components/atoms/Flex';
 import { Box } from '../../components/atoms/Box';
 import { Link } from '../../components/atoms/Link';
-import { CountdownTimer } from '../../components/atoms/CountdownTimer';
 // import { useAuth } from '../../hooks/useAuth';
 
 interface SetNewPasswordFormData {

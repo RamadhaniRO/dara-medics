@@ -151,7 +151,7 @@ const AuditLogs: React.FC = () => {
     };
 
     fetchAuditData();
-  }, [selectedCategory, selectedStatus, dateRange]);
+  }, [selectedCategory, selectedStatus, dateRange, handleAuthError]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);

@@ -171,11 +171,12 @@ const EmailVerification: React.FC = () => {
             </Box>
 
             {verificationStatus === 'success' && (
-              <Alert type="success" marginBottom="lg">
-                <Text size="sm">
-                  Redirecting to login page in 3 seconds...
-                </Text>
-              </Alert>
+              <Alert 
+                type="success" 
+                message="Redirecting to login page in 3 seconds..."
+                show={true}
+                autoClose={false}
+              />
             )}
 
             {(verificationStatus === 'error' || verificationStatus === 'expired') && (

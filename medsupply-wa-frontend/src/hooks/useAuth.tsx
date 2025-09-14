@@ -126,7 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       // Note: User will need to verify email before they can log in
-      return result.user;
+      // Don't set user state until email is verified
     } catch (error: any) {
       console.error('Registration error:', error);
       throw error;

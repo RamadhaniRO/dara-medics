@@ -1,5 +1,5 @@
-import { supabase, typedSupabase, Database } from './supabase';
-import { User, Session, AuthError } from '@supabase/supabase-js';
+import { supabase } from './supabase';
+import { Session, AuthError } from '@supabase/supabase-js';
 
 export interface AuthUser {
   id: string;
@@ -39,7 +39,7 @@ export class SupabaseAuthService {
       }
 
       // Get user profile from profiles table
-      const { data: profile, error: profileError } = await typedSupabase
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
@@ -104,7 +104,7 @@ export class SupabaseAuthService {
 
       // Create user profile
       if (authData.user) {
-        const { error: profileError } = await typedSupabase
+        const { error: profileError } = await supabase
           .from('profiles')
           .insert({
             id: authData.user.id,
@@ -215,7 +215,7 @@ export class SupabaseAuthService {
   // Update user profile
   async updateProfile(updates: Partial<AuthUser>): Promise<{ error: any }> {
     try {
-      const { error } = await typedSupabase
+      const { error } = await supabase
         .from('profiles')
         .update({
           full_name: updates.full_name,
@@ -240,7 +240,7 @@ export class SupabaseAuthService {
   async signInWithProvider(provider: 'google' | 'microsoft' | 'apple'): Promise<{ error: AuthError | null }> {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider,
+        provider: provider as any,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`
         }

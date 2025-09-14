@@ -1,0 +1,54 @@
+# Cursor Rules for DARA Medics Frontend
+
+## Component-Level Changes Rule
+**CRITICAL**: Always make changes at the component level, not at the page level. This ensures consistency across all places where the component is used.
+
+### When to Update Components:
+- ✅ **DO**: Update the base component (e.g., `Button.tsx`, `Input.tsx`, `FormField.tsx`)
+- ✅ **DO**: Update component props and interfaces
+- ✅ **DO**: Update component styling and themes
+- ❌ **DON'T**: Override component styles in individual pages
+- ❌ **DON'T**: Duplicate component logic across pages
+
+### Examples:
+- **Button styling**: Update `Button.tsx` component, not individual page implementations
+- **Form field spacing**: Update `FormField.tsx` or `Input.tsx`, not page-specific styles
+- **Icon changes**: Update the component that renders icons, not individual usages
+- **Color schemes**: Update component themes, not inline styles
+
+### Benefits:
+- Consistent UI across all pages
+- Easier maintenance and updates
+- Single source of truth for component behavior
+- Reduced code duplication
+- Better scalability
+
+### Implementation Guidelines:
+1. Identify the base component that needs changes
+2. Update the component's props, styling, or behavior
+3. Test that changes work across all usage locations
+4. Update component documentation if needed
+5. Ensure TypeScript types are updated accordingly
+
+## Branding Standards
+**CRITICAL**: All branding must use "DARA Medics" consistently throughout the application.
+
+### Branding Rules:
+- ✅ **DO**: Use "DARA Medics" in all user-facing text
+- ✅ **DO**: Update component titles and descriptions with new branding
+- ✅ **DO**: Maintain consistent branding across all authentication pages
+- ❌ **DON'T**: Use old branding names like "MedSupply-WA"
+- ❌ **DON'T**: Mix different branding names in the same application
+
+## Code Quality Standards
+- Use TypeScript for all components
+- Follow atomic design principles (atoms, molecules, organisms)
+- Maintain consistent naming conventions
+- Use embedded themes for self-contained components
+- Ensure proper prop validation and error handling
+
+## File Organization
+- Keep components in their respective atomic design folders
+- Use index.ts files for clean exports
+- Maintain consistent import/export patterns
+- Document component props and usage examples

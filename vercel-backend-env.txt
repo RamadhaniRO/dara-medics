@@ -1,0 +1,53 @@
+# Vercel Backend Environment Variables
+# Copy these EXACTLY as shown below into your Vercel backend project
+# Go to: Vercel Dashboard → Your Backend Project → Settings → Environment Variables
+
+# =============================================================================
+# REQUIRED VARIABLES (Essential for backend to work)
+# =============================================================================
+
+NODE_ENV=production
+PORT=3000
+
+# Supabase Configuration (Required)
+SUPABASE_URL=https://mdwicqcwzkmlwajxutjy.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kd2ljcWN3emttbHdhanh1dGp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5ODk1MTUsImV4cCI6MjA3MjU2NTUxNX0.rXTR5PaijHWzt78MXiWBrjyL0n4fhap4PS1hKIvZNTY
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kd2ljcWN3emttbHdhanh1dGp5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njk4OTUxNSwiZXhwIjoyMDcyNTY1NTE1fQ.8K9X2Y3Z4A5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0Q1R2S3T4U5V6W7X8Y9Z0
+
+# Authentication Configuration
+JWT_SECRET=dara_medics_super_secure_jwt_secret_key_2024_production_ready_256bit_encryption_key_that_will_last_for_years_and_provide_excellent_security_for_all_authentication_tokens_and_sessions_throughout_the_entire_application_lifecycle
+JWT_EXPIRES_IN=7d
+JWT_ISSUER=https://dara-medics-backend.vercel.app
+JWT_AUDIENCE=https://dara-medics-frontend.vercel.app
+
+# Session Management
+SESSION_SECRET=dara_medics_session_secret_key_2024_production_ready_ultra_secure_session_management_key_for_long_term_stability_and_excellent_security_throughout_the_entire_application_lifecycle_with_256bit_encryption
+
+# CORS Configuration
+CORS_ORIGIN=https://dara-medics-frontend.vercel.app
+ENABLE_CORS=true
+
+# Email Verification Settings
+ENABLE_EMAIL_CONFIRMATION=true
+SKIP_EMAIL_VERIFICATION=false
+EMAIL_CONFIRMATION_REQUIRED=true
+EMAIL_REDIRECT_TO=https://dara-medics-frontend.vercel.app/auth/verify
+
+# Security Settings
+ENABLE_RATE_LIMIT=false
+ENABLE_HTTPS=false
+
+# Development Settings
+DEBUG_MODE=false
+MOCK_AUTH=false
+
+# =============================================================================
+# INSTRUCTIONS FOR VERCEL:
+# =============================================================================
+# 1. Go to Vercel Dashboard
+# 2. Select your backend project (dara-medics-backend)
+# 3. Go to Settings → Environment Variables
+# 4. Add each variable above one by one
+# 5. Set each variable for: Production, Preview, Development
+# 6. Save and trigger a new deployment
+# =============================================================================

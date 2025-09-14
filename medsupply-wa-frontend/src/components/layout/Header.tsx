@@ -293,10 +293,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, sidebarCollapsed }) => {
         
         <UserSection>
           <UserAvatar>
-            {getUserInitials(user?.name)}
+            {getUserInitials(user?.full_name)}
           </UserAvatar>
           <UserInfo>
-            <UserName>{user?.name || 'John Doe'}</UserName>
+            <UserName>{user?.full_name || 'John Doe'}</UserName>
             <UserRole>{user?.role || 'Warehouse Staff'}</UserRole>
           </UserInfo>
         </UserSection>

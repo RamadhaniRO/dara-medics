@@ -12,6 +12,7 @@ import ResetPassword from './pages/auth/ResetPassword';
 import VerifyAccount from './pages/auth/VerifyAccount';
 import ChangePassword from './pages/auth/ChangePassword';
 import SetNewPassword from './pages/auth/SetNewPassword';
+import AuthCallback from './pages/auth/AuthCallback';
 import Dashboard from './pages/dashboard/Dashboard';
 import CatalogManagement from './pages/catalog/CatalogManagement';
 import OrderManagement from './pages/orders/OrderManagement';
@@ -68,6 +69,7 @@ function App() {
             <Route path="/verify-account" element={<VerifyAccount />} />
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/set-new-password" element={<SetNewPassword />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/demo" element={<ComponentDemo />} />

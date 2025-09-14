@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { CheckCircle, Info } from 'lucide-react';
+import { FaGoogle, FaMicrosoft, FaApple } from 'react-icons/fa';
 import { AuthLayout } from '../../components/organisms/AuthLayout';
 import { Input } from '../../components/atoms/Input';
 import { PasswordField } from '../../components/molecules/PasswordField';
@@ -24,17 +25,32 @@ interface LoginFormData {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, socialLogin, getSocialProviders } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [availableProviders, setAvailableProviders] = useState<any[]>([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
+
+  // Load available social providers on component mount
+  useEffect(() => {
+    const loadProviders = async () => {
+      try {
+        const providers = await getSocialProviders();
+        setAvailableProviders(providers);
+      } catch (error) {
+        console.error('Failed to load social providers:', error);
+      }
+    };
+
+    loadProviders();
+  }, [getSocialProviders]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
@@ -58,8 +74,19 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleSocialLogin = (provider: string) => {
-    toast(`${provider} login coming soon!`);
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      setIsLoading(true);
+      await socialLogin(provider as 'google' | 'microsoft' | 'apple');
+      // The redirect will happen automatically
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : `${provider} login failed`;
+      setAlertMessage(errorMessage);
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
+      toast.error(errorMessage);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -172,9 +199,18 @@ const Login: React.FC = () => {
             {/* Social Login Buttons */}
             <Box marginBottom="1.25rem">
               <SocialLoginButtons
-                onGoogleLogin={() => handleSocialLogin('Google')}
-                onMicrosoftLogin={() => handleSocialLogin('Microsoft')}
-                onAppleLogin={() => handleSocialLogin('Apple')}
+                onGoogleLogin={() => handleSocialLogin('google')}
+                onMicrosoftLogin={() => handleSocialLogin('microsoft')}
+                onAppleLogin={() => handleSocialLogin('apple')}
+                disabled={isLoading}
+                loading={isLoading}
+                providers={availableProviders.map(provider => ({
+                  name: provider.name,
+                  icon: provider.name === 'google' ? <FaGoogle color="#4285F4" /> : 
+                        provider.name === 'microsoft' ? <FaMicrosoft color="#00BCF2" /> : 
+                        <FaApple color="#000000" />,
+                  onClick: () => handleSocialLogin(provider.name)
+                }))}
               />
             </Box>
 

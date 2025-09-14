@@ -28,6 +28,7 @@ import { PaymentRoutes } from './api/routes/payment.routes';
 import { AdminRoutes } from './api/routes/admin.routes';
 import { HealthRoutes } from './api/routes/health.routes';
 import { createAuthRoutes } from './api/routes/auth.routes';
+import { createSocialAuthRoutes } from './api/routes/social-auth.routes';
 
 // Import middleware
 import { errorHandler } from './api/middleware/error.handler';
@@ -200,6 +201,14 @@ class MedSupplyWA {
     
     this.app.use('/api/auth', authRoutes);
     console.log('✅ Auth routes registered at /api/auth');
+
+    // Social Authentication routes (no auth required)
+    console.log('🔧 Creating social auth routes...');
+    const socialAuthRoutes = createSocialAuthRoutes(this.databaseService, this.logger);
+    console.log('✅ Social auth routes created:', !!socialAuthRoutes);
+    
+    this.app.use('/api/auth', socialAuthRoutes);
+    console.log('✅ Social auth routes registered at /api/auth');
 
     // Protected routes
     this.app.use('/api/v1/orders', authMiddleware, OrderRoutes);

@@ -41,6 +41,16 @@ export interface RegisterResponse {
   user: User;
 }
 
+export interface SocialAuthProvider {
+  name: string;
+  url: string;
+  enabled: boolean;
+}
+
+export interface SocialAuthProvidersResponse {
+  providers: SocialAuthProvider[];
+}
+
 // API Client Class
 class ApiClient {
   private baseURL: string;
@@ -225,6 +235,50 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify({ currentPassword, newPassword }),
     });
+  }
+
+  // Social Authentication endpoints
+  async getSocialAuthProviders(): Promise<ApiResponse<SocialAuthProvidersResponse>> {
+    return this.request<SocialAuthProvidersResponse>('/api/auth/providers');
+  }
+
+  async initiateSocialLogin(provider: 'google' | 'microsoft' | 'apple'): Promise<void> {
+    // Redirect to the OAuth provider
+    const response = await this.request<SocialAuthProvidersResponse>('/api/auth/providers');
+    
+    if (response.data?.providers) {
+      const providerData = response.data.providers.find(p => p.name === provider);
+      if (providerData?.url) {
+        window.location.href = providerData.url;
+      } else {
+        throw new Error(`${provider} authentication is not available`);
+      }
+    } else {
+      throw new Error('Failed to get authentication providers');
+    }
+  }
+
+  async handleSocialCallback(token: string, provider: string): Promise<ApiResponse<LoginResponse>> {
+    // This method handles the callback after social authentication
+    // The token is already set by the backend redirect
+    if (token) {
+      this.setToken(token);
+      
+      // Validate the token to get user info
+      const userResponse = await this.validateToken();
+      if (userResponse.data) {
+        return {
+          data: {
+            token,
+            user: userResponse.data
+          }
+        };
+      }
+    }
+    
+    return {
+      error: 'Social authentication failed'
+    };
   }
 
   // Admin endpoints

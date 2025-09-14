@@ -10,6 +10,9 @@ interface AuthContextType {
   logout: () => void;
   register: (userData: RegisterRequest) => Promise<RegisterResponse>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  socialLogin: (provider: 'google' | 'microsoft' | 'apple') => Promise<void>;
+  handleSocialCallback: (token: string, provider: string) => Promise<void>;
+  getSocialProviders: () => Promise<any[]>;
   loading: boolean;
   isAuthenticated: boolean;
 }
@@ -139,12 +142,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const socialLogin = async (provider: 'google' | 'microsoft' | 'apple') => {
+    try {
+      setLoading(true);
+      await apiClient.initiateSocialLogin(provider);
+      // The redirect will happen automatically
+    } catch (error) {
+      console.error('Social login error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSocialCallback = async (token: string, provider: string) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.handleSocialCallback(token, provider);
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      if (response.data) {
+        setUser(response.data.user);
+        console.log('Social login successful:', response.data.user.email);
+      }
+    } catch (error) {
+      console.error('Social callback error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSocialProviders = async () => {
+    try {
+      const response = await apiClient.getSocialAuthProviders();
+      return response.data?.providers || [];
+    } catch (error) {
+      console.error('Failed to get social providers:', error);
+      return [];
+    }
+  };
+
   const value: AuthContextType = {
     user,
     login,
     logout,
     register,
     changePassword,
+    socialLogin,
+    handleSocialCallback,
+    getSocialProviders,
     loading,
     isAuthenticated: !!user,
   };

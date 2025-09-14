@@ -3,18 +3,23 @@
   "name": "dara-medics-backend",
   "builds": [
     {
-      "src": "src/index.ts",
+      "src": "src/serverless.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.ts"
+      "dest": "src/serverless.ts"
     }
   ],
   "env": {
     "NODE_ENV": "production",
     "PORT": "3000"
+  },
+  "functions": {
+    "src/serverless.ts": {
+      "maxDuration": 30
+    }
   }
 }

@@ -3,14 +3,14 @@
   "name": "dara-medics-backend",
   "builds": [
     {
-      "src": "src/serverless-simple.ts",
+      "src": "src/serverless-enhanced.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/serverless-simple.ts"
+      "dest": "src/serverless-enhanced.ts"
     }
   ],
   "env": {

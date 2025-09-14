@@ -30,7 +30,6 @@ import WhatsAppPreview from './pages/whatsapp/WhatsAppPreview';
 import UserProfile from './pages/profile/UserProfile';
 import TermsOfService from './pages/legal/TermsOfService';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
-import ComponentDemo from './pages/demo/ComponentDemo';
 
 // Import components
 import Layout from './components/layout/Layout';
@@ -75,7 +74,6 @@ function App() {
             <Route path="/auth/verify/:token" element={<EmailVerification />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/demo" element={<ComponentDemo />} />
             
             {/* Protected routes */}
             <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>

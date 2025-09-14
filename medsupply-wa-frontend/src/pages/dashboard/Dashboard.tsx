@@ -62,17 +62,43 @@ const Dashboard: React.FC = () => {
         setLoading(true);
         setError(null);
         
-        const response = await apiClient.getDashboard();
+        // For now, use mock data instead of API call to prevent loading issues
+        // TODO: Replace with actual API call when backend dashboard endpoint is ready
+        const mockMetrics: DashboardMetrics = {
+          totalOrdersToday: {
+            value: 24,
+            change: 12.5,
+            trend: 'up'
+          },
+          activeConversations: {
+            value: 8,
+            change: -2.1,
+            trend: 'down'
+          },
+          pendingEscalations: {
+            value: 3,
+            change: 0,
+            trend: 'up'
+          },
+          revenueToday: {
+            value: 15420,
+            change: 8.7,
+            trend: 'up'
+          }
+        };
         
-        if (response.error) {
-          throw new Error(response.error);
-        }
+        setMetrics(mockMetrics);
         
-        if (response.data?.metrics) {
-          setMetrics(response.data.metrics);
-        } else {
-          throw new Error('No metrics data received');
-        }
+        // Uncomment when backend dashboard endpoint is ready:
+        // const response = await apiClient.getDashboard();
+        // if (response.error) {
+        //   throw new Error(response.error);
+        // }
+        // if (response.data?.metrics) {
+        //   setMetrics(response.data.metrics);
+        // } else {
+        //   throw new Error('No metrics data received');
+        // }
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
         const errorMessage = err instanceof Error ? err.message : 'Failed to load dashboard data';

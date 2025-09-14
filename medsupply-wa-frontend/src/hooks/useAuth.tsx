@@ -48,9 +48,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const session = await authService.getCurrentSession();
         const user = await authService.getCurrentUser();
         
+        console.log('Initial session check:', { 
+          hasSession: !!session, 
+          hasUser: !!user, 
+          sessionUser: !!session?.user 
+        });
+        
         if (isMounted) {
           setSession(session);
           setUser(user);
+          
+          // If we have a session but no user, clear the session
+          if (session && !user) {
+            console.log('Session exists but no user - clearing session');
+            setSession(null);
+            await authService.signOut();
+          }
+          
           setLoading(false);
           clearTimeout(loadingTimeout);
         }
@@ -215,7 +229,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     handleSocialCallback,
     getSocialProviders,
     loading,
-    isAuthenticated: !!user && !!session
+    isAuthenticated: !!user && !!session && !!session.user
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

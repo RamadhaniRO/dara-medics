@@ -15,7 +15,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 
 # Authentication Configuration
 JWT_SECRET=nItHhNqk3uMbd37iGajdw0kMcful9vCT4Fw5Y/dqGkU73w/mJr/KhZkEU1yh3QjTMBZRv7gVyNGAd+mvZwp6lQ==
-JWT_EXPIRES_IN=24h
+JWT_EXPIRES_IN=7d
 JWT_ISSUER=https://dara-medics.vercel.app/
 JWT_AUDIENCE=https://your-frontend-domain.vercel.app
 

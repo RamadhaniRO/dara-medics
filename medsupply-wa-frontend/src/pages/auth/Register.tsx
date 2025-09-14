@@ -54,30 +54,30 @@ const Register: React.FC = () => {
     setIsLoading(true);
     try {
       console.log('Attempting to register user...');
-      const response = await registerUser({
+      await registerUser({
         email: data.email,
         password: data.password,
-        confirmPassword: data.confirmPassword,
-        pharmacyName: data.pharmacyName,
+        full_name: data.pharmacyName, // Map pharmacyName to full_name for Supabase
+        pharmacy_name: data.pharmacyName,
       });
       
-      console.log('Registration successful:', response);
+      console.log('Registration successful');
       
-      // Show success message
-      setAlertMessage('Account created successfully! You can now log in.');
+      // Show success message for email verification
+      setAlertMessage('Account created successfully! Please check your email to verify your account before logging in.');
       setShowSuccessAlert(true);
       setShowErrorAlert(false);
-      toast.success('Account created successfully! You can now log in.');
+      toast.success('Account created! Please check your email to verify your account.');
       
-      // Navigate directly to login page after a short delay
+      // Navigate to login page with verification message
       setTimeout(() => {
         navigate('/login', { 
           state: { 
             email: data.email,
-            message: 'Account created successfully! Please log in.'
+            message: 'Account created! Please check your email to verify your account before logging in.'
           } 
         });
-      }, 2000);
+      }, 3000);
       
     } catch (error) {
       console.error('Registration error:', error);

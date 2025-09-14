@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { AuthLayout } from '../../components/organisms/AuthLayout';
 import { Button } from '../../components/atoms/Button';
@@ -7,7 +7,7 @@ import { Text } from '../../components/atoms/Text';
 import { Box } from '../../components/atoms/Box';
 import { Flex } from '../../components/atoms/Flex';
 import { Alert } from '../../components/atoms/Alert';
-import { apiClient } from '../../services/api';
+import { supabase } from '../../services/supabase';
 
 interface VerificationParams {
   token?: string;
@@ -15,29 +15,48 @@ interface VerificationParams {
 }
 
 const EmailVerification: React.FC = () => {
-  const { token, type } = useParams<VerificationParams>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [verificationStatus, setVerificationStatus] = useState<'loading' | 'success' | 'error' | 'expired'>('loading');
   const [message, setMessage] = useState('');
   const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
+    // Get token and type from URL search params (Supabase format)
+    const token = searchParams.get('token');
+    const type = searchParams.get('type');
+    
     if (token && type === 'email') {
       verifyEmail(token);
     } else {
       setVerificationStatus('error');
       setMessage('Invalid verification link');
     }
-  }, [token, type]);
+  }, [searchParams]);
 
   const verifyEmail = async (verificationToken: string) => {
     try {
       setVerificationStatus('loading');
       
-      // Call your backend API to verify the email
-      const response = await apiClient.verifyEmail(verificationToken);
+      // Verify email with Supabase
+      const { data, error } = await supabase.auth.verifyOtp({
+        token_hash: verificationToken,
+        type: 'email'
+      });
       
-      if (response.success) {
+      if (error) {
+        console.error('Email verification error:', error);
+        if (error.message.includes('expired') || error.message.includes('invalid')) {
+          setVerificationStatus('expired');
+          setMessage('This verification link has expired or is invalid. Please request a new one.');
+        } else {
+          setVerificationStatus('error');
+          setMessage(error.message || 'Email verification failed');
+        }
+        return;
+      }
+
+      if (data.user) {
         setVerificationStatus('success');
         setMessage('Your email has been successfully verified! You can now log in to your account.');
         
@@ -47,18 +66,12 @@ const EmailVerification: React.FC = () => {
         }, 3000);
       } else {
         setVerificationStatus('error');
-        setMessage(response.message || 'Email verification failed');
+        setMessage('Email verification failed');
       }
     } catch (error: any) {
       console.error('Email verification error:', error);
-      
-      if (error.message?.includes('expired') || error.message?.includes('invalid')) {
-        setVerificationStatus('expired');
-        setMessage('This verification link has expired or is invalid. Please request a new one.');
-      } else {
-        setVerificationStatus('error');
-        setMessage('An error occurred during email verification. Please try again.');
-      }
+      setVerificationStatus('error');
+      setMessage('An error occurred during email verification. Please try again.');
     }
   };
 
@@ -67,20 +80,29 @@ const EmailVerification: React.FC = () => {
       setIsResending(true);
       
       // Get email from URL params or prompt user
-      const email = new URLSearchParams(window.location.search).get('email');
+      const email = searchParams.get('email');
       
       if (!email) {
         setMessage('Email address is required to resend verification');
         return;
       }
 
-      const response = await apiClient.resendVerificationEmail(email);
+      // Resend verification email with Supabase
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/verify`
+        }
+      });
       
-      if (response.success) {
-        setMessage('A new verification email has been sent to your email address.');
-      } else {
+      if (error) {
+        console.error('Resend verification error:', error);
         setMessage('Failed to resend verification email. Please try again.');
+        return;
       }
+
+      setMessage('A new verification email has been sent to your email address.');
     } catch (error: any) {
       console.error('Resend verification error:', error);
       setMessage('An error occurred while resending the verification email.');

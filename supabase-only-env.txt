@@ -1,0 +1,30 @@
+# SUPABASE-ONLY ENVIRONMENT VARIABLES
+# Complete migration to Supabase for all services
+
+# ===========================================
+# FRONTEND ENVIRONMENT VARIABLES (Vercel Frontend Project)
+# ===========================================
+REACT_APP_SUPABASE_URL=https://mdwicqcwzkmlwajxutjy.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kd2ljcWN3emttbHdhanh1dGp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5ODk1MTUsImV4cCI6MjA3MjU2NTUxNX0.rXTR5PaijHWzt78MXiWBrjyL0n4fhap4PS1hKIvZNTY
+
+# ===========================================
+# BACKEND ENVIRONMENT VARIABLES (Vercel Backend Project)
+# ===========================================
+SUPABASE_URL=https://mdwicqcwzkmlwajxutjy.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kd2ljcWN3emttbHdhanh1dGp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5ODk1MTUsImV4cCI6MjA3MjU2NTUxNX0.rXTR5PaijHWzt78MXiWBrjyL0n4fhap4PS1hKIvZNTY
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kd2ljcWN3emttbHdhanh1dGp5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njk4OTUxNSwiZXhwIjoyMDcyNTY1NTE1fQ.YITviIwJVNs5ZjWubjPxeZhYwxL_WlXvEM5hdS6ip_I
+
+# ===========================================
+# SUPABASE AUTHENTICATION SETTINGS
+# ===========================================
+ENABLE_EMAIL_CONFIRMATION=true
+SKIP_EMAIL_VERIFICATION=false
+EMAIL_CONFIRMATION_REQUIRED=true
+EMAIL_REDIRECT_TO=https://your-frontend-domain.vercel.app/auth/verify
+EMAIL_TEMPLATE_SITE_URL=https://your-frontend-domain.vercel.app
+
+# ===========================================
+# SERVER CONFIGURATION
+# ===========================================
+PORT=3000
+NODE_ENV=production

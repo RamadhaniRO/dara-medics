@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { Text } from '../Text';
 // import { Button } from '../Button';
@@ -175,13 +175,13 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const [isClosing, setIsClosing] = React.useState(false);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       onClose();
       setIsClosing(false);
     }, 300);
-  };
+  }, [onClose]);
 
   useEffect(() => {
     if (isOpen && closeOnEscape) {

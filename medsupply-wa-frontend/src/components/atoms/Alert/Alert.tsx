@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { Text } from '../Text';
 
@@ -232,14 +232,14 @@ export const Alert: React.FC<AlertProps> = ({
   const [isClosing, setIsClosing] = useState(false);
   const [progress, setProgress] = useState(100);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       onClose?.();
       setIsClosing(false);
       setProgress(100);
     }, 300);
-  };
+  }, [onClose]);
 
   useEffect(() => {
     if (show && autoClose) {

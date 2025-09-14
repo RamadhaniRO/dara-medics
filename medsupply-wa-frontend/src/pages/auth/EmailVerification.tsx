@@ -15,19 +15,6 @@ const EmailVerification: React.FC = () => {
   const [message, setMessage] = useState('');
   const [isResending, setIsResending] = useState(false);
 
-  useEffect(() => {
-    // Get token and type from URL search params (Supabase format)
-    const token = searchParams.get('token');
-    const type = searchParams.get('type');
-    
-    if (token && type === 'email') {
-      verifyEmail(token);
-    } else {
-      setVerificationStatus('error');
-      setMessage('Invalid verification link');
-    }
-  }, [searchParams, verifyEmail]);
-
   const verifyEmail = useCallback(async (verificationToken: string) => {
     try {
       setVerificationStatus('loading');
@@ -68,6 +55,19 @@ const EmailVerification: React.FC = () => {
       setMessage('An error occurred during email verification. Please try again.');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    // Get token and type from URL search params (Supabase format)
+    const token = searchParams.get('token');
+    const type = searchParams.get('type');
+    
+    if (token && type === 'email') {
+      verifyEmail(token);
+    } else {
+      setVerificationStatus('error');
+      setMessage('Invalid verification link');
+    }
+  }, [searchParams, verifyEmail]);
 
   const resendVerificationEmail = async () => {
     try {

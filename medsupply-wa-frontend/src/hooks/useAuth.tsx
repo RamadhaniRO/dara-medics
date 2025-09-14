@@ -40,10 +40,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         setSession(session);
         setUser(user);
+        setLoading(false); // Set loading to false immediately after getting session
       } catch (error) {
         console.error('Error getting initial session:', error);
-      } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false even on error
       }
     };
 
@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
       }
       
-      setLoading(false);
+      setLoading(false); // Always set loading to false after auth state change
     });
 
     return () => {

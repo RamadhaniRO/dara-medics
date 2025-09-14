@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { AuthLayout } from '../../components/organisms/AuthLayout';
 import { Button } from '../../components/atoms/Button';
 import { Text } from '../../components/atoms/Text';
 import { Box } from '../../components/atoms/Box';
-import { Flex } from '../../components/atoms/Flex';
 import { Alert } from '../../components/atoms/Alert';
 import { supabase } from '../../services/supabase';
-
-interface VerificationParams {
-  token?: string;
-  type?: string;
-}
 
 const EmailVerification: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -32,9 +26,9 @@ const EmailVerification: React.FC = () => {
       setVerificationStatus('error');
       setMessage('Invalid verification link');
     }
-  }, [searchParams]);
+  }, [searchParams, verifyEmail]);
 
-  const verifyEmail = async (verificationToken: string) => {
+  const verifyEmail = useCallback(async (verificationToken: string) => {
     try {
       setVerificationStatus('loading');
       
@@ -73,7 +67,7 @@ const EmailVerification: React.FC = () => {
       setVerificationStatus('error');
       setMessage('An error occurred during email verification. Please try again.');
     }
-  };
+  }, [navigate]);
 
   const resendVerificationEmail = async () => {
     try {

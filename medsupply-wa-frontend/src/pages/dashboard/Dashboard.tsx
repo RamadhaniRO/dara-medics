@@ -23,7 +23,6 @@ import RecentOrders from '../../components/dashboard/RecentOrders';
 import SystemHealth from '../../components/dashboard/SystemHealth';
 
 // Import API client
-import { apiClient } from '../../services/api';
 import { useAuthErrorHandler } from '../../utils/useAuthErrorHandler';
 
 interface DashboardMetrics {

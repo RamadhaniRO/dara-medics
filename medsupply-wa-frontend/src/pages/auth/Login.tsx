@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { CheckCircle, Info } from 'lucide-react';
-import { FaGoogle, FaMicrosoft, FaApple } from 'react-icons/fa';
 import { AuthLayout } from '../../components/organisms/AuthLayout';
 import { Input } from '../../components/atoms/Input';
 import { PasswordField } from '../../components/molecules/PasswordField';
@@ -25,12 +24,11 @@ interface LoginFormData {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login, socialLogin, getSocialProviders } = useAuth();
+  const { login, socialLogin } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const [availableProviders, setAvailableProviders] = useState<any[]>([]);
 
   const {
     register,
@@ -38,19 +36,6 @@ const Login: React.FC = () => {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  // Load available social providers on component mount
-  useEffect(() => {
-    const loadProviders = async () => {
-      try {
-        const providers = await getSocialProviders();
-        setAvailableProviders(providers);
-      } catch (error) {
-        console.error('Failed to load social providers:', error);
-      }
-    };
-
-    loadProviders();
-  }, [getSocialProviders]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
@@ -204,13 +189,6 @@ const Login: React.FC = () => {
                 onAppleLogin={() => handleSocialLogin('apple')}
                 disabled={isLoading}
                 loading={isLoading}
-                providers={availableProviders.map(provider => ({
-                  name: provider.name,
-                  icon: provider.name === 'google' ? <FaGoogle color="#4285F4" /> : 
-                        provider.name === 'microsoft' ? <FaMicrosoft color="#00BCF2" /> : 
-                        <FaApple color="#000000" />,
-                  onClick: () => handleSocialLogin(provider.name)
-                }))}
               />
             </Box>
 

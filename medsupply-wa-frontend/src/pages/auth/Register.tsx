@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { AuthLayout } from '../../components/organisms/AuthLayout';
 import { Input } from '../../components/atoms/Input';
 import { PasswordField } from '../../components/molecules/PasswordField';
+import { SocialLoginButtons } from '../../components/molecules/SocialLoginButtons';
 import { Button } from '../../components/atoms/Button';
 import { Text } from '../../components/atoms/Text';
 import { Flex } from '../../components/atoms/Flex';
@@ -22,7 +23,7 @@ interface RegisterFormData {
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { register: registerUser } = useAuth();
+  const { register: registerUser, socialLogin } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -45,6 +46,21 @@ const Register: React.FC = () => {
   });
 
   const password = watch('password');
+
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      setIsLoading(true);
+      await socialLogin(provider as 'google' | 'microsoft' | 'apple');
+      // The redirect will happen automatically
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : `${provider} login failed`;
+      setAlertMessage(errorMessage);
+      setShowErrorAlert(true);
+      setShowSuccessAlert(false);
+      toast.error(errorMessage);
+      setIsLoading(false);
+    }
+  };
 
   const onSubmit = async (data: RegisterFormData) => {
     console.log('=== FORM SUBMISSION ===');
@@ -233,6 +249,24 @@ const Register: React.FC = () => {
             >
               Create Account
             </Button>
+
+            {/* Divider */}
+            <Flex align="center" marginBottom="lg">
+              <Box flex="1" height="1px" backgroundColor="gray.200" />
+              <Text marginX="1rem" color="gray.500" size="sm">Or sign up with</Text>
+              <Box flex="1" height="1px" backgroundColor="gray.200" />
+            </Flex>
+
+            {/* Social Login Buttons */}
+            <Box marginBottom="lg">
+              <SocialLoginButtons
+                onGoogleLogin={() => handleSocialLogin('google')}
+                onMicrosoftLogin={() => handleSocialLogin('microsoft')}
+                onAppleLogin={() => handleSocialLogin('apple')}
+                disabled={isLoading}
+                loading={isLoading}
+              />
+            </Box>
 
             {/* Navigation Links */}
             <Flex justify="center" align="center" marginBottom="lg">

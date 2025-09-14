@@ -12,7 +12,8 @@ import {
   Heading,
   Text,
   Flex,
-  Box
+  Box,
+  DashboardSkeleton
 } from '../../components';
 
 // Import custom components
@@ -137,13 +138,7 @@ const Dashboard: React.FC = () => {
 
   // Show loading state
   if (loading) {
-    return (
-      <Container maxWidth="1400px" center>
-        <Flex direction="column" gap="3xl" align="center" justify="center" style={{ minHeight: '400px' }}>
-          <Text size="lg" color="#64748b">Loading dashboard...</Text>
-        </Flex>
-      </Container>
-    );
+    return <DashboardSkeleton />;
   }
 
   // Show error state

@@ -18,7 +18,8 @@ import {
   Button,
   Flex,
   Box,
-  Link
+  Link,
+  AnalyticsSkeleton
 } from '../../components';
 
 // Import enhanced components
@@ -182,6 +183,11 @@ const Analytics: React.FC = () => {
   ];
 
   const metrics = analyticsData ? formatMetrics(analyticsData) : [];
+
+  // Show loading state
+  if (loading) {
+    return <AnalyticsSkeleton />;
+  }
 
   return (
     <Container maxWidth="1400px" center>

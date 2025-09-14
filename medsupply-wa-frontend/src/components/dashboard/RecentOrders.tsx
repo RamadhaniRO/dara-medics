@@ -10,7 +10,9 @@ import {
   Heading,
   Badge,
   Link,
-  Button
+  Button,
+  SkeletonList,
+  SkeletonOrderCard
 } from '../atoms';
 
 // Import API client
@@ -182,9 +184,11 @@ const RecentOrders: React.FC = () => {
       </Flex>
 
       {loading ? (
-        <Flex direction="column" align="center" justify="center" style={{ minHeight: '200px' }}>
-          <Text size="sm" color="#64748b">Loading recent orders...</Text>
-        </Flex>
+        <div>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonOrderCard key={i} />
+          ))}
+        </div>
       ) : error ? (
         <Flex direction="column" align="center" justify="center" style={{ minHeight: '200px' }}>
           <Text size="sm" color="#ef4444">Error: {error}</Text>

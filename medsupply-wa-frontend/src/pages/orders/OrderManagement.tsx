@@ -23,7 +23,8 @@ import {
   Grid,
   Flex,
   Box,
-  SimpleMetricCard
+  SimpleMetricCard,
+  OrdersSkeleton
 } from '../../components';
 
 // Import API client
@@ -256,6 +257,11 @@ const OrderManagement: React.FC = () => {
   const pendingOrders = formattedOrders.filter(o => o.status === 'pending').length;
   const processingOrders = formattedOrders.filter(o => o.status === 'processing').length;
   const totalRevenue = formattedOrders.reduce((sum, o) => sum + o.total, 0);
+
+  // Show loading state
+  if (loading) {
+    return <OrdersSkeleton />;
+  }
 
   return (
     <Container maxWidth="1400px" center>

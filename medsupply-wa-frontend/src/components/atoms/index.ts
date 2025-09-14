@@ -21,3 +21,22 @@ export { Modal, type ModalProps } from './Modal/Modal';
 export { Progress, CircularProgress, type ProgressProps } from './Progress/Progress';
 export { Loading, type LoadingProps } from './Loading/Loading';
 export { PasswordStrengthIndicator, type PasswordStrengthIndicatorProps } from './PasswordStrengthIndicator/PasswordStrengthIndicator';
+
+// Skeleton loading components
+export { 
+  SkeletonBox,
+  SkeletonText,
+  SkeletonCircle,
+  SkeletonCard,
+  SkeletonMetricCard,
+  SkeletonTableRow,
+  SkeletonOrderCard,
+  SkeletonChart,
+  SkeletonList,
+  SkeletonGrid,
+  DashboardSkeleton,
+  AnalyticsSkeleton,
+  PaymentsSkeleton,
+  OrdersSkeleton,
+  default as Skeleton
+} from './Skeleton/Skeleton';

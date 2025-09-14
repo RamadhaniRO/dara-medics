@@ -26,7 +26,8 @@ import {
   Grid,
   Flex,
   Box,
-  SimpleMetricCard
+  SimpleMetricCard,
+  PaymentsSkeleton
 } from '../../components';
 
 // Import API client
@@ -270,6 +271,11 @@ const PaymentManagement: React.FC = () => {
   const pendingPayments = formattedPayments.filter(p => p.status === 'pending').length;
   const totalRevenue = formattedPayments.filter(p => p.status === 'completed').reduce((sum, p) => sum + p.netAmount, 0);
   const totalFees = formattedPayments.reduce((sum, p) => sum + p.fees, 0);
+
+  // Show loading state
+  if (loading) {
+    return <PaymentsSkeleton />;
+  }
 
   return (
     <Container maxWidth="1400px" center>

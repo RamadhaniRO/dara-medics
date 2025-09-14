@@ -32,18 +32,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
+    // Set a timeout to ensure loading doesn't persist indefinitely
+    const loadingTimeout = setTimeout(() => {
+      if (isMounted) {
+        console.log('Loading timeout reached, setting loading to false');
+        setLoading(false);
+      }
+    }, 5000); // 5 second timeout
+
     // Get initial session
     const getInitialSession = async () => {
       try {
         const session = await authService.getCurrentSession();
         const user = await authService.getCurrentUser();
         
-        setSession(session);
-        setUser(user);
-        setLoading(false); // Set loading to false immediately after getting session
+        if (isMounted) {
+          setSession(session);
+          setUser(user);
+          setLoading(false);
+          clearTimeout(loadingTimeout);
+        }
       } catch (error) {
         console.error('Error getting initial session:', error);
-        setLoading(false); // Set loading to false even on error
+        if (isMounted) {
+          setLoading(false);
+          clearTimeout(loadingTimeout);
+        }
       }
     };
 
@@ -53,19 +69,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = authService.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.email);
       
-      setSession(session);
-      
-      if (session?.user) {
-        const user = await authService.getCurrentUser();
-        setUser(user);
-      } else {
-        setUser(null);
+      if (isMounted) {
+        setSession(session);
+        
+        if (session?.user) {
+          const user = await authService.getCurrentUser();
+          setUser(user);
+        } else {
+          setUser(null);
+        }
+        
+        setLoading(false);
+        clearTimeout(loadingTimeout);
       }
-      
-      setLoading(false); // Always set loading to false after auth state change
     });
 
     return () => {
+      isMounted = false;
+      clearTimeout(loadingTimeout);
       subscription.unsubscribe();
     };
   }, []);

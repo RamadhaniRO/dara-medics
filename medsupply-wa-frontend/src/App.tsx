@@ -35,6 +35,7 @@ import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import AuthDebug from './components/debug/AuthDebug';
 import { AuthProvider } from './hooks/useAuth';
 // Global styles are now handled by individual components
 import { setupGlobalErrorHandling } from './services/errorHandler';
@@ -59,6 +60,7 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
+          <AuthDebug />
             <Router>
           <Routes>
             {/* Public routes */}

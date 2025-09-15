@@ -88,10 +88,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (session?.user) {
           console.log('Session has user, fetching user data...');
+          console.log('Session user details:', session.user);
           try {
             const user = await authService.getCurrentUser();
             console.log('Fetched user data:', user);
-            setUser(user);
+            if (user) {
+              console.log('Setting user state with:', user);
+              setUser(user);
+            } else {
+              console.log('getCurrentUser returned null, this should not happen');
+            }
           } catch (error) {
             console.error('Error fetching user data:', error);
             // If we can't get user data, clear the session

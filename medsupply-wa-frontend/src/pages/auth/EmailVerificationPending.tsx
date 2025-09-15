@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Mail, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { AuthLayout } from '../../components/organisms/AuthLayout';
 import { Button } from '../../components/atoms/Button';
 import { Text } from '../../components/atoms/Text';

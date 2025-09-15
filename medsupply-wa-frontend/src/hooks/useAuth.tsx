@@ -196,12 +196,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (result.user) {
         // Check if user needs email verification
+        // Use type assertion to access Supabase user properties
+        const supabaseUser = result.user as any;
         const needsVerification = !result.session || 
-                                 (result.user.email_confirmed_at === null) ||
-                                 (result.user.email_confirmed_at === undefined);
+                                 (supabaseUser.email_confirmed_at === null) ||
+                                 (supabaseUser.email_confirmed_at === undefined);
         
         console.log('Needs verification:', needsVerification);
-        console.log('Email confirmed at:', result.user.email_confirmed_at);
+        console.log('Email confirmed at:', supabaseUser.email_confirmed_at);
         
         if (needsVerification) {
           console.log('User created, email verification sent');

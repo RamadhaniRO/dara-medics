@@ -12,6 +12,7 @@ interface AuthContextType {
   socialLogin: (provider: 'google' | 'microsoft' | 'apple') => Promise<void>;
   handleSocialCallback: (token: string, provider: string) => Promise<void>;
   getSocialProviders: () => Promise<any[]>;
+  clearAuthData: () => Promise<void>;
   loading: boolean;
   isAuthenticated: boolean;
 }
@@ -275,6 +276,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     ];
   };
 
+  const clearAuthData = async () => {
+    try {
+      console.log('Clearing all auth data...');
+      await authService.signOut();
+      setUser(null);
+      setSession(null);
+      console.log('Auth data cleared successfully');
+    } catch (error) {
+      console.error('Error clearing auth data:', error);
+    }
+  };
+
   const value: AuthContextType = {
     user,
     session,
@@ -285,6 +298,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     socialLogin,
     handleSocialCallback,
     getSocialProviders,
+    clearAuthData,
     loading,
     isAuthenticated: !!user && !!session && !!session.user
   };

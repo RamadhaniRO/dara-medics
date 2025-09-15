@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  register: (userData: RegisterData) => Promise<void>;
+  register: (userData: RegisterData) => Promise<{ needsVerification: boolean; message: string } | void>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   socialLogin: (provider: 'google' | 'microsoft' | 'apple') => Promise<void>;
   handleSocialCallback: (token: string, provider: string) => Promise<void>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 const AuthDebugControls: React.FC = () => {
   const { clearAuthData, user, session, isAuthenticated } = useAuth();

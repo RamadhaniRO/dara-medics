@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -23,7 +23,7 @@ interface RegisterFormData {
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { register: registerUser, socialLogin } = useAuth();
+  const { register: registerUser, socialLogin, clearAuthData } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -44,6 +44,16 @@ const Register: React.FC = () => {
       confirmPassword: '',
     }
   });
+
+  // Clear auth data when component mounts to ensure clean registration state
+  useEffect(() => {
+    const clearAuthOnMount = async () => {
+      console.log('Register page mounted - clearing auth data for clean state');
+      await clearAuthData();
+    };
+    
+    clearAuthOnMount();
+  }, [clearAuthData]);
 
   const password = watch('password');
 

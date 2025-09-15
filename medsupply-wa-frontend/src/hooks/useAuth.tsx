@@ -46,23 +46,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const getInitialSession = async () => {
       try {
         const session = await authService.getCurrentSession();
-        const user = await authService.getCurrentUser();
         
         console.log('Initial session check:', { 
           hasSession: !!session, 
-          hasUser: !!user, 
           sessionUser: !!session?.user 
         });
         
         if (isMounted) {
           setSession(session);
-          setUser(user);
           
-          // If we have a session but no user, clear the session
-          if (session && !user) {
-            console.log('Session exists but no user - clearing session');
-            setSession(null);
-            await authService.signOut();
+          if (session?.user) {
+            // Create user data directly from session
+            const userData = {
+              id: session.user.id,
+              email: session.user.email!,
+              full_name: session.user.user_metadata?.full_name || 'User',
+              pharmacy_name: session.user.user_metadata?.pharmacy_name || 'Pharmacy',
+              role: 'pharmacy_owner',
+              created_at: session.user.created_at
+            };
+            console.log('Initial user data from session:', userData);
+            setUser(userData);
+          } else {
+            setUser(null);
           }
           
           setLoading(false);
@@ -87,23 +93,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         
         if (session?.user) {
-          console.log('Session has user, fetching user data...');
+          console.log('Session has user, creating user data directly...');
           console.log('Session user details:', session.user);
-          try {
-            const user = await authService.getCurrentUser();
-            console.log('Fetched user data:', user);
-            if (user) {
-              console.log('Setting user state with:', user);
-              setUser(user);
-            } else {
-              console.log('getCurrentUser returned null, this should not happen');
-            }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
-            // If we can't get user data, clear the session
-            setSession(null);
-            setUser(null);
-          }
+          
+          // Create user data directly from session instead of calling getCurrentUser
+          const userData = {
+            id: session.user.id,
+            email: session.user.email!,
+            full_name: session.user.user_metadata?.full_name || 'User',
+            pharmacy_name: session.user.user_metadata?.pharmacy_name || 'Pharmacy',
+            role: 'pharmacy_owner',
+            created_at: session.user.created_at
+          };
+          
+          console.log('Created user data directly from session:', userData);
+          setUser(userData);
         } else {
           console.log('No session user, clearing user data');
           setUser(null);
@@ -114,9 +118,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
 
+    // Force a refresh after a short delay to ensure state is updated
+    const forceRefresh = setTimeout(() => {
+      if (isMounted) {
+        console.log('Force refresh triggered - checking auth state');
+        getInitialSession();
+      }
+    }, 1000);
+
     return () => {
       isMounted = false;
       clearTimeout(loadingTimeout);
+      clearTimeout(forceRefresh);
       subscription.unsubscribe();
     };
   }, []);

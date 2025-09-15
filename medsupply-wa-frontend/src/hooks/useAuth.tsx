@@ -181,26 +181,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(true);
       const result = await authService.signUp(userData);
       
+      console.log('Registration result:', result);
+      console.log('Result user:', result.user);
+      console.log('Result session:', result.session);
+      
       if (result.error) {
         throw new Error(result.error.message);
       }
       
-      // When email verification is enabled, Supabase doesn't return user/session immediately
-      // Instead, it sends a verification email
-      if (result.user && !result.session) {
-        // User created but needs email verification
-        console.log('User created, email verification sent');
-        // Don't set user state - they need to verify email first
+      // When email verification is enabled, Supabase behavior varies:
+      // - Sometimes returns user but no session
+      // - Sometimes returns no user at all
+      // - Sometimes returns user with email_confirmed_at: null
+      
+      if (result.user) {
+        // Check if user needs email verification
+        const needsVerification = !result.session || 
+                                 (result.user.email_confirmed_at === null) ||
+                                 (result.user.email_confirmed_at === undefined);
+        
+        console.log('Needs verification:', needsVerification);
+        console.log('Email confirmed at:', result.user.email_confirmed_at);
+        
+        if (needsVerification) {
+          console.log('User created, email verification sent');
+          return { needsVerification: true, message: 'Please check your email to verify your account' };
+        } else {
+          // User is verified and signed in
+          setUser(result.user);
+          setSession(result.session);
+        }
+      } else {
+        // No user returned - this usually means email verification is required
+        console.log('No user returned - email verification required');
         return { needsVerification: true, message: 'Please check your email to verify your account' };
       }
-      
-      if (!result.user) {
-        throw new Error('Registration failed');
-      }
-      
-      // If we get here, email verification is disabled and user is signed in
-      setUser(result.user);
-      setSession(result.session);
       
     } catch (error: any) {
       console.error('Registration error:', error);

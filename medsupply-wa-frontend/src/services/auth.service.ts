@@ -82,6 +82,16 @@ export class SupabaseAuthService {
   // Sign up with email and password
   async signUp(data: RegisterData): Promise<AuthResponse> {
     try {
+      console.log('SignUp called with:', { email: data.email, enableEmailVerification });
+      
+      const emailRedirectTo = enableEmailVerification ? 
+        (process.env.NODE_ENV === 'production' 
+          ? 'https://dara-medics-frontend.vercel.app/auth/verify'
+          : `${window.location.origin}/auth/verify`
+        ) : undefined;
+      
+      console.log('Email redirect URL:', emailRedirectTo);
+      
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -90,11 +100,7 @@ export class SupabaseAuthService {
             full_name: data.full_name,
             pharmacy_name: data.pharmacy_name
           },
-          emailRedirectTo: enableEmailVerification ? 
-            (process.env.NODE_ENV === 'production' 
-              ? 'https://dara-medics-frontend.vercel.app/auth/verify'
-              : `${window.location.origin}/auth/verify`
-            ) : undefined
+          emailRedirectTo
         }
       });
 

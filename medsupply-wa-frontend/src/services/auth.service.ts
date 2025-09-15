@@ -90,7 +90,11 @@ export class SupabaseAuthService {
             full_name: data.full_name,
             pharmacy_name: data.pharmacy_name
           },
-          emailRedirectTo: enableEmailVerification ? `${window.location.origin}/auth/verify` : undefined
+          emailRedirectTo: enableEmailVerification ? 
+            (process.env.NODE_ENV === 'production' 
+              ? 'https://dara-medics-frontend.vercel.app/auth/verify'
+              : `${window.location.origin}/auth/verify`
+            ) : undefined
         }
       });
 

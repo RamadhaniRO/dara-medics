@@ -126,27 +126,27 @@ const SystemHealth: React.FC = () => {
       },
       {
         title: 'WhatsApp Connection',
-        value: data.services.whatsapp === 'connected' ? 'Connected' : 'Disconnected',
-        status: getServiceStatus(data.services.whatsapp),
+        value: data.services?.whatsapp === 'connected' ? 'Connected' : 'Disconnected',
+        status: getServiceStatus(data.services?.whatsapp || 'unknown'),
         icon: FiMessageCircle,
-        color: getServiceStatus(data.services.whatsapp) === 'healthy' ? '#10b981' : '#f59e0b',
-        description: getServiceDescription('whatsapp', data.services.whatsapp)
+        color: getServiceStatus(data.services?.whatsapp || 'unknown') === 'healthy' ? '#10b981' : '#f59e0b',
+        description: getServiceDescription('whatsapp', data.services?.whatsapp || 'unknown')
       },
       {
         title: 'Database Status',
-        value: data.services.database === 'healthy' ? 'Healthy' : 'Issues',
-        status: getServiceStatus(data.services.database),
+        value: data.services?.database === 'healthy' ? 'Healthy' : 'Issues',
+        status: getServiceStatus(data.services?.database || 'unknown'),
         icon: FiDatabase,
-        color: getServiceStatus(data.services.database) === 'healthy' ? '#10b981' : '#f59e0b',
-        description: getServiceDescription('database', data.services.database)
+        color: getServiceStatus(data.services?.database || 'unknown') === 'healthy' ? '#10b981' : '#f59e0b',
+        description: getServiceDescription('database', data.services?.database || 'unknown')
       },
       {
         title: 'Message Queue',
-        value: data.services.conversations === 'healthy' ? 'Processing' : 'Queue Issues',
-        status: getServiceStatus(data.services.conversations),
+        value: data.services?.conversations === 'healthy' ? 'Processing' : 'Queue Issues',
+        status: getServiceStatus(data.services?.conversations || 'unknown'),
         icon: FiClock,
-        color: getServiceStatus(data.services.conversations) === 'healthy' ? '#10b981' : '#f59e0b',
-        description: getServiceDescription('conversations', data.services.conversations)
+        color: getServiceStatus(data.services?.conversations || 'unknown') === 'healthy' ? '#10b981' : '#f59e0b',
+        description: getServiceDescription('conversations', data.services?.conversations || 'unknown')
       }
     ];
   };

@@ -93,11 +93,13 @@ const RecentOrders: React.FC = () => {
             {
               id: '1',
               order_number: 'ORD-001',
-              customer_name: 'Sample Pharmacy',
+              pharmacy_id: 'pharmacy-001',
+              status: 'completed',
+              total_amount: 1250.00,
               final_amount: 1250.00,
               payment_status: 'paid',
-              order_status: 'completed',
-              created_at: new Date().toISOString()
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
             }
           ];
           setOrders(mockOrders);
@@ -171,7 +173,7 @@ const RecentOrders: React.FC = () => {
       
       return {
         id: order.order_number,
-        pharmacy: order.pharmacies?.name || 'Unknown Pharmacy',
+        pharmacy: 'Sample Pharmacy', // Use a default name for now
         amount,
         paymentStatus: paymentInfo.status,
         orderStatus: orderInfo.status,

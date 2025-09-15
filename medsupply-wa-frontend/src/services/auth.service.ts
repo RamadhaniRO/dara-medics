@@ -36,18 +36,42 @@ export class SupabaseAuthService {
       const { data: { user }, error } = await supabase.auth.getUser();
       
       if (error || !user) {
+        console.log('No user from Supabase auth:', error);
         return null;
       }
 
-      // Get user profile from profiles table
+      console.log('Supabase user found:', user.email);
+
+      // Try to get user profile from profiles table
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
 
-      if (profileError || !profile) {
-        return null;
+      if (profileError) {
+        console.log('Profile not found, using auth user data:', profileError.message);
+        // If profile doesn't exist, return user data from auth
+        return {
+          id: user.id,
+          email: user.email!,
+          full_name: user.user_metadata?.full_name || 'User',
+          pharmacy_name: user.user_metadata?.pharmacy_name || 'Pharmacy',
+          role: 'pharmacy_owner',
+          created_at: user.created_at
+        };
+      }
+
+      if (!profile) {
+        console.log('Profile is null, using auth user data');
+        return {
+          id: user.id,
+          email: user.email!,
+          full_name: user.user_metadata?.full_name || 'User',
+          pharmacy_name: user.user_metadata?.pharmacy_name || 'Pharmacy',
+          role: 'pharmacy_owner',
+          created_at: user.created_at
+        };
       }
 
       return {

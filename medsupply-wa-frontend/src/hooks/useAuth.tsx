@@ -185,12 +185,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error(result.error.message);
       }
       
+      // When email verification is enabled, Supabase doesn't return user/session immediately
+      // Instead, it sends a verification email
+      if (result.user && !result.session) {
+        // User created but needs email verification
+        console.log('User created, email verification sent');
+        // Don't set user state - they need to verify email first
+        return { needsVerification: true, message: 'Please check your email to verify your account' };
+      }
+      
       if (!result.user) {
         throw new Error('Registration failed');
       }
       
-      // Note: User will need to verify email before they can log in
-      // Don't set user state until email is verified
+      // If we get here, email verification is disabled and user is signed in
+      setUser(result.user);
+      setSession(result.session);
+      
     } catch (error: any) {
       console.error('Registration error:', error);
       throw error;

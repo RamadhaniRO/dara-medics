@@ -70,30 +70,36 @@ const Register: React.FC = () => {
     setIsLoading(true);
     try {
       console.log('Attempting to register user...');
-      await registerUser({
+      const result = await registerUser({
         email: data.email,
         password: data.password,
         full_name: data.pharmacyName, // Map pharmacyName to full_name for Supabase
         pharmacy_name: data.pharmacyName,
       });
       
-      console.log('Registration successful');
+      console.log('Registration result:', result);
       
-      // Show success message for email verification
-      setAlertMessage('Account created successfully! Please check your email to verify your account before logging in.');
-      setShowSuccessAlert(true);
-      setShowErrorAlert(false);
-      toast.success('Account created! Please check your email to verify your account.');
-      
-      // Navigate to login page with verification message
-      setTimeout(() => {
-        navigate('/login', { 
-          state: { 
-            email: data.email,
-            message: 'Account created! Please check your email to verify your account before logging in.'
-          } 
-        });
-      }, 3000);
+      // Check if email verification is needed
+      if (result && result.needsVerification) {
+        // Show success message for email verification
+        setAlertMessage('Account created successfully! Please check your email to verify your account before logging in.');
+        setShowSuccessAlert(true);
+        setShowErrorAlert(false);
+        toast.success('Account created! Please check your email to verify your account.');
+        
+        // Navigate to verification pending page
+        setTimeout(() => {
+          navigate('/auth/verify-pending', { 
+            state: { 
+              email: data.email
+            } 
+          });
+        }, 3000);
+      } else {
+        // Email verification disabled, user is signed in
+        toast.success('Account created successfully!');
+        navigate('/dashboard');
+      }
       
     } catch (error) {
       console.error('Registration error:', error);

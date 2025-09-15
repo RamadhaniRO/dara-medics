@@ -14,6 +14,7 @@ import ChangePassword from './pages/auth/ChangePassword';
 import SetNewPassword from './pages/auth/SetNewPassword';
 import AuthCallback from './pages/auth/AuthCallback';
 import EmailVerification from './pages/auth/EmailVerification';
+import EmailVerificationPending from './pages/auth/EmailVerificationPending';
 import Dashboard from './pages/dashboard/Dashboard';
 import CatalogManagement from './pages/catalog/CatalogManagement';
 import OrderManagement from './pages/orders/OrderManagement';
@@ -74,6 +75,7 @@ function App() {
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/auth/verify" element={<EmailVerification />} />
             <Route path="/auth/verify/:token" element={<EmailVerification />} />
+            <Route path="/auth/verify-pending" element={<EmailVerificationPending />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             

@@ -33,6 +33,7 @@ export class SupabaseAuthService {
   // Get current user
   async getCurrentUser(): Promise<AuthUser | null> {
     try {
+      console.log('getCurrentUser called');
       const { data: { user }, error } = await supabase.auth.getUser();
       
       if (error || !user) {
@@ -42,53 +43,19 @@ export class SupabaseAuthService {
 
       console.log('Supabase user found:', user.email);
 
-      // Try to get user profile from profiles table
-      console.log('Attempting to fetch profile for user ID:', user.id);
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      console.log('Profile query result:', { profile, profileError });
-
-      if (profileError) {
-        console.log('Profile not found, using auth user data:', profileError.message);
-        // If profile doesn't exist, return user data from auth
-        const fallbackUser = {
-          id: user.id,
-          email: user.email!,
-          full_name: user.user_metadata?.full_name || 'User',
-          pharmacy_name: user.user_metadata?.pharmacy_name || 'Pharmacy',
-          role: 'pharmacy_owner',
-          created_at: user.created_at
-        };
-        console.log('Returning fallback user data:', fallbackUser);
-        return fallbackUser;
-      }
-
-      if (!profile) {
-        console.log('Profile is null, using auth user data');
-        const fallbackUser = {
-          id: user.id,
-          email: user.email!,
-          full_name: user.user_metadata?.full_name || 'User',
-          pharmacy_name: user.user_metadata?.pharmacy_name || 'Pharmacy',
-          role: 'pharmacy_owner',
-          created_at: user.created_at
-        };
-        console.log('Returning fallback user data (null profile):', fallbackUser);
-        return fallbackUser;
-      }
-
-      return {
-        id: profile.id,
-        email: profile.email,
-        full_name: profile.full_name,
-        pharmacy_name: profile.pharmacy_name,
-        role: profile.role,
-        created_at: profile.created_at
+      // For now, skip profiles table and use auth user data directly
+      // This will ensure we always return user data when authenticated
+      const authUser = {
+        id: user.id,
+        email: user.email!,
+        full_name: user.user_metadata?.full_name || 'User',
+        pharmacy_name: user.user_metadata?.pharmacy_name || 'Pharmacy',
+        role: 'pharmacy_owner',
+        created_at: user.created_at
       };
+      
+      console.log('Returning auth user data directly:', authUser);
+      return authUser;
     } catch (error) {
       console.error('Error getting current user:', error);
       return null;
